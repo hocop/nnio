@@ -1,12 +1,3 @@
-**Attention!**
-
-<br>
-
-Repository is now hosted at https://github.com/hocop/nnio
-
-<br><br><br>
-<hr>
-
 # nnio
 
 Please refer to the [project's documentation](https://nnio.readthedocs.io/).
