@@ -4,14 +4,17 @@ Please refer to the [project's documentation](https://nnio.readthedocs.io/).
 
 ## What is it
 
-Very simple python API for inferencing neural networks. Ideal for sharing your models with colleagues who are not data scientists.
+Very simple python wrapper for inferencing neural networks. Ideal for sharing your models with colleagues who are not data scientists.
+
+![torch scheme](docs/images/torch_scheme.png)
 
 **Features:**
-1. Supports **different formats**: onnx, pytorch, openVino, tflite. Loading a model takes *one line of code*.
-2. Acts on **numpy arrays** and outputs numpy arrays. Inference also takes *one line of code*.
-3. Has flexible **image preprocessing** class, which can also read image from file.
-4. **Can read** models and images from **URLs instead of paths**.
-5. Has a bunch of **built-in models**. E.g. object detection, classification, person re-identification.
+1. Supports **different formats**: [ONNX](https://nnio.readthedocs.io/en/latest/basic_usage.html#nnio.ONNXModel), [TF Lite](https://nnio.readthedocs.io/en/latest/basic_usage.html#nnio.EdgeTPUModel), [OpenVINO](https://nnio.readthedocs.io/en/latest/basic_usage.html#nnio.OpenVINOModel), [Torch](https://nnio.readthedocs.io/en/latest/basic_usage.html#nnio.TorchModel)
+2. Loading any model takes one line of code.
+3. Acts on **numpy arrays** and outputs numpy arrays. Inference takes one line of code.
+4. Has flexible [nnio.Preprocessing](https://nnio.readthedocs.io/en/latest/utils.html#nnio-preprocessing) class for images, which can also read image from file or URL.
+5. **Can read** models and images from **URLs instead of paths**.
+6. Has a bunch of **built-in models**. E.g. object detection, classification, person re-identification. See [nnio.zoo](https://nnio.readthedocs.io/en/latest/zoo.html)
 
 It supports running models on CPU as well as some accelerators:
 
@@ -79,14 +82,5 @@ boxes = model(image)
 ```
 
 `boxes` is a list of [nnio.DetectionBox](https://nnio.readthedocs.io/en/latest/utils.html#nnio-detectionbox) objects.
-
-## What is it for
-
-**nnio** was initially developed for the [Fast Sense X](https://fastsense.readthedocs.io/en/latest/) microcomputer.
-It has **six neural accelerators**, which are all supported by nnio:
-
-* 3 x [Google Coral Edge TPU](https://coral.ai/)
-* 2 x [Intel VPU](https://www.intel.ru/content/www/ru/ru/products/processors/movidius-vpu/movidius-myriad-x.html)
-* an integrated Intel GPU
 
 [More usage examples](https://nnio.readthedocs.io/en/latest/basic_usage.html) can be found in the [documentation](https://nnio.readthedocs.io/).
