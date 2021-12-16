@@ -65,7 +65,7 @@ model = nnio.ONNXModel(
 ```
 For this example you will need `onnxruntime` or `onnxruntime-gpu` to be installed, depending on what device you want to use. Install them using pip. See [Installation docs](https://nnio.readthedocs.io/en/latest/install.html).
 
-### Using built-in pretrained model:
+### Using pretrained model:
 
 ```python
 # Load model
