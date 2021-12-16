@@ -12,7 +12,8 @@ class OSNet(_model.Model):
     Here is the `webcam demo <https://github.com/FastSense/nnio/tree/master/demos>`_ of this model working.
     '''
 
-    URL = 'https://github.com/FastSense/nnio/raw/master/models/person-reid/osnet_x1_0/osnet_x1_0_op10.onnx'
+    GDRIVE_ID = '1FlkHyebtkIqkE4jPfGZu-RXwfgCe4T1p'
+    FILE_NAME = 'osnet_x1_0_op10.onnx'
 
     def __init__(
         self,
@@ -22,7 +23,8 @@ class OSNet(_model.Model):
         super().__init__()
 
         # Load model
-        self.model = _onnx.ONNXModel(self.URL)
+        url = f'gdrive://{self.GDRIVE_ID}/{self.FILE_NAME}'
+        self.model = _onnx.ONNXModel(url)
 
     def forward(self, image, return_info=False):
         '''

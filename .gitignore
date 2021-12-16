@@ -6,3 +6,4 @@ docs/build
 docs/source/_build
 nnio.egg-info
 models
+build

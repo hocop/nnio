@@ -4,6 +4,7 @@ import pathlib
 import getpass
 import datetime
 import numpy as np
+import requests
 
 from . import __version__
 
@@ -13,7 +14,7 @@ PACKAGE_NAME = 'nnio'
 LOG_TEMPERATURE = False
 temperature_files = {}
 
-URL_MARKERS = ['http://', 'https://']
+URL_MARKERS = ['http://', 'https://', 'gdrive://']
 
 def is_url(s):
     '''
@@ -38,6 +39,16 @@ def file_from_url(url, category='other', file_name=None, use_cached=True):
     for marker in URL_MARKERS:
         url_path = url_path.replace(marker, '')
     url_path = '/'.join(url_path.split('/')[:-1])
+
+    # Get file name
+    file_name = file_name or url.split('/')[-1].split('?')[0]
+
+    # Modify link for gdrive
+    if url.startswith('gdrive://'):
+        gdrive_id = url_path
+        url_path = 'gdrive/' + gdrive_id
+        url = f'https://docs.google.com/uc?id={gdrive_id}'
+
     # Get base path for file
     base_path = os.path.join(
         '/home',
@@ -52,7 +63,6 @@ def file_from_url(url, category='other', file_name=None, use_cached=True):
     if not os.path.exists(base_path):
         pathlib.Path(base_path).mkdir(parents=True, exist_ok=True)
     # Get file path
-    file_name = file_name or url.split('/')[-1]
     file_path = os.path.join(
         base_path,
         file_name
@@ -60,12 +70,47 @@ def file_from_url(url, category='other', file_name=None, use_cached=True):
     # Download file from the url
     if not os.path.exists(file_path) or not use_cached:
         print('Downloading file from: {}'.format(url))
-        urllib.request.urlretrieve(url, file_path)
+        download_file(url, file_path)
         print('Downloaded to: {}'.format(file_path))
     else:
         print('Using cached file: {}'.format(file_path))
 
     return file_path
+
+
+def download_file(url, file_path):
+    if 'docs.google.com' in url:
+        download_file_from_google_drive(url, file_path)
+    else:
+        urllib.request.urlretrieve(url, file_path)
+
+
+def download_file_from_google_drive(url, file_path):
+    session = requests.Session()
+
+    response = session.get(url, stream=True)
+    token = get_confirm_token(response)
+
+    if token:
+        params = {'confirm': token}
+        response = session.get(url, params=params, stream=True)
+
+    save_response_content(response, file_path)
+
+def get_confirm_token(response):
+    for key, value in response.cookies.items():
+        if key.startswith('download_warning'):
+            return value
+
+    return None
+
+def save_response_content(response, destination):
+    CHUNK_SIZE = 32768
+
+    with open(destination, "wb") as f:
+        for chunk in response.iter_content(CHUNK_SIZE):
+            if chunk: # filter out keep-alive new chunks
+                f.write(chunk)
 
 
 # Flag setter
